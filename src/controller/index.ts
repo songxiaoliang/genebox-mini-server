@@ -1,4 +1,4 @@
-import { ScreenCaptureController } from './screencapture.controller';
+import { MiniUploadController } from './miniupload.controller';
 export {
-    ScreenCaptureController
+    MiniUploadController
 }

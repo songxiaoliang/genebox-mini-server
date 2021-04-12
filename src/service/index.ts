@@ -1,5 +1,5 @@
-import { ScreenCaptureService } from './screencapture.service';
+import { MiniUploadService } from './miniupload.service';
 
 export {
-    ScreenCaptureService
+    MiniUploadService
 }
