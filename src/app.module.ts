@@ -1,17 +1,14 @@
 import { Module } from '@nestjs/common';
 import { PuppeteerModule } from 'nest-puppeteer';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ScreenCaptureController } from './controller';
+import { ScreenCaptureService } from './service';
 
 @Module({
   imports: [
-    PuppeteerModule.forRoot(
-        {
-            pipe: true,
-        },
-    ),
+    PuppeteerModule.forRoot({ pipe: true }),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [ScreenCaptureController],
+  providers: [ScreenCaptureService],
 })
+
 export class AppModule {}
