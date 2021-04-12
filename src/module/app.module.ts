@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PuppeteerModule } from 'nest-puppeteer';
-import { ScreenCaptureController } from './controller';
-import { ScreenCaptureService } from './service';
+import { ScreenCaptureController } from '../controller';
+import { ScreenCaptureService } from '../service';
 
 @Module({
   imports: [
