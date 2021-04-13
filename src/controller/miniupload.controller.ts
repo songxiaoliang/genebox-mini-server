@@ -8,7 +8,7 @@ export class MiniUploadController {
 
   @Get()
   async getHello() {
-    this.service.crawl("https://www.baidu.com/");
+    this.service.crawl("https://mp.weixin.qq.com/");
   }
 
   @Post()
