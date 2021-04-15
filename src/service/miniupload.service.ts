@@ -45,38 +45,65 @@ export class MiniUploadService {
    * @returns
    * @memberof MiniUploadService
    */
-  async crawl(url: string) {
+  async puppteerWork(url: string) {
+    // launch 微信公众平台
     await this.page.goto(url, { waitUntil: 'networkidle2' });
-    // base64需要添加前缀: data:image/jpeg;base64,
-    const img = await this.page.screenshot({
-        path: 'screenshot.png',
+    
+    // 获取登录二维码位置
+    const wxLoginCode = await this.page.$('.login__type__container__scan__qrcode');
+    const wxLoginCodeboundingBox = await wxLoginCode.boundingBox();
+    
+    // 截取登录二维码
+    await this.page.screenshot({
         // encoding: 'base64',
-        // clip: {
-        //     x: 20, // 裁剪区域相对于左上角（0， 0）的x坐标
-        //     y: 20, // 裁剪区域相对于左上角（0， 0）的y坐标
-        //     width: 100, // 裁剪的宽度
-        //     height: 100, // 裁剪的高度
-        // }
+        path: 'wx_login_code.png',
+        clip: {
+            x: wxLoginCodeboundingBox.x,
+            y: wxLoginCodeboundingBox.y,
+            width: wxLoginCodeboundingBox.width,
+            height: wxLoginCodeboundingBox.height,
+        }
     });
-    // 等待跳转到管理页面
+    
+    // 将二维码回传前端展示
+
+    // 等待扫描登录二维码，跳转到管理页面
     await this.page.waitForNavigation();
+    
     // 选择版本管理
-    const link = await this.page.$('.menu_item');
-    await link.click();
+    const link = await this.page.click('.menu_item');
+    
     // 等待版本管理内部跳转
     await this.page.waitForSelector('.code_version_logs');
+    
     // 选择版本
+    
+    // 设为体验版
 
-    // 设置为体验版
+    // 打开体验版二维码
+    await this.page.click('.js_show_exp_version');
 
-    // 打开验证码图片
+    // 获取体验版二维码位置 
+    const devMiniCode = await this.page.$('.code_qrcode');
+    const devMiniCodeBoundingBox = await devMiniCode.boundingBox();
 
-    // 截取验证码
-    const img2 = await this.page.screenshot({
-        path: 'screenshot1.png',
+    // 截取体验版二维码
+    await this.page.screenshot({
+        // encoding: 'base64',
+        path: 'mini_dev_code.png',
+        clip: {
+            x: devMiniCodeBoundingBox.x,
+            y: devMiniCodeBoundingBox.y,
+            width: devMiniCodeBoundingBox.width,
+            height: devMiniCodeBoundingBox.height,
+        }
     });
-    // 将验证码回发给前端页面，并同步钉钉通知
+  
+    // 将体验版回发给前端页面，并同步钉钉通知
+    this.notify();
+  
     // 关闭页面
+    this.page.close();
   }
 
   /**
