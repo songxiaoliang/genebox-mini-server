@@ -48,12 +48,12 @@ export class MiniUploadService {
   async puppteerWork(url: string) {
     // launch 微信公众平台
     await this.page.goto(url, { waitUntil: 'networkidle2' });
-    
+
     // 获取登录二维码位置
     const wxLoginCode = await this.page.$('.login__type__container__scan__qrcode');
     const wxLoginCodeboundingBox = await wxLoginCode.boundingBox();
     
-    // 截取登录二维码
+    // 截取登录二维码 
     await this.page.screenshot({
         // encoding: 'base64',
         path: 'wx_login_code.png',
@@ -69,7 +69,8 @@ export class MiniUploadService {
 
     // 等待扫描登录二维码，跳转到管理页面
     await this.page.waitForNavigation();
-    
+    await this.page.waitForSelector('.menu_item');
+  
     // 选择版本管理
     const link = await this.page.click('.menu_item');
     
@@ -79,26 +80,20 @@ export class MiniUploadService {
     // 选择版本
     
     // 设为体验版
-
+    
     // 打开体验版二维码
     await this.page.click('.js_show_exp_version');
 
     // 获取体验版二维码位置 
+    await this.page.waitForSelector('.code_qrcode');
     const devMiniCode = await this.page.$('.code_qrcode');
-    const devMiniCodeBoundingBox = await devMiniCode.boundingBox();
-
+   
     // 截取体验版二维码
-    await this.page.screenshot({
+    await devMiniCode.screenshot({
         // encoding: 'base64',
         path: 'mini_dev_code.png',
-        clip: {
-            x: devMiniCodeBoundingBox.x,
-            y: devMiniCodeBoundingBox.y,
-            width: devMiniCodeBoundingBox.width,
-            height: devMiniCodeBoundingBox.height,
-        }
     });
-  
+
     // 将体验版回发给前端页面，并同步钉钉通知
     this.notify();
   
