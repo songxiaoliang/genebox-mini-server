@@ -91,7 +91,7 @@ export class MiniUploadService {
    
     // 截取体验版二维码
     const base64CodeImg: string | void | Buffer = await devMiniCode.screenshot({
-        encoding: 'base64',
+        // encoding: 'base64',
         path: 'mini_dev_code.png',
     });
     // 将体验版回发给前端页面，并同步钉钉通知
