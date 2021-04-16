@@ -25,6 +25,7 @@
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.0.0",
+    "dingtalk-robot-sender": "^1.2.0",
     "miniprogram-ci": "^1.2.3",
     "nest-puppeteer": "^1.1.1",
     "puppeteer": "^8.0.0",

@@ -4,6 +4,7 @@ import { InjectPage } from 'nest-puppeteer';
 
 const path = require('path');
 const ci = require('miniprogram-ci');
+const ChatBot = require('dingtalk-robot-sender');
 // const package = require('./package.json');
 
 import { UploadConfig } from '../config';
@@ -89,13 +90,12 @@ export class MiniUploadService {
     const devMiniCode = await this.page.$('.code_qrcode');
    
     // 截取体验版二维码
-    await devMiniCode.screenshot({
-        // encoding: 'base64',
+    const base64CodeImg: string | void | Buffer = await devMiniCode.screenshot({
+        encoding: 'base64',
         path: 'mini_dev_code.png',
     });
-
     // 将体验版回发给前端页面，并同步钉钉通知
-    this.notify();
+    this.notify(base64CodeImg);
   
     // 关闭页面
     this.page.close();
@@ -105,7 +105,14 @@ export class MiniUploadService {
    * 通知群
    * @memberof MiniUploadService
    */
-  async notify() {
-
+  async notify(codeImgUrl: string | void | Buffer) {
+    const robot = new ChatBot({
+      webhook: 'https://oapi.dingtalk.com/robot/send?access_token=49c8677bb7fb7a93fe81f7c86bb95c6ebeb7f3f6d935dd077bb713eedf9494a9'
+    });
+    const notifyContent = `#### 体验版二维码 \n`;
+    const at = { isAtAll: true };
+    robot.markdown('体验版二维码', notifyContent, at).then((res) => {
+      console.log('----', res);
+    });
   }
 }
